@@ -1,14 +1,17 @@
+require_relative "./journey.rb"
+
 class Oystercard
-  attr_reader :balance, :maximum_limit, :entry_station, :trip, :journey_history
+  attr_reader :balance, :maximum_limit, :trip, :journey_history, :journey
 
   INITIAL_BALANCE = 0
   BALANCE_LIMIT = 90
   MINIMUM_FARE = 1
 
-  def initialize(balance = INITIAL_BALANCE, maximum_limit = BALANCE_LIMIT)
+  def initialize(balance = INITIAL_BALANCE, maximum_limit = BALANCE_LIMIT, journey = Journey.new)
     @balance = balance
     @maximum_limit = maximum_limit
     @journey_history = []
+    @journey = journey
   end
 
   def top_up(value)
@@ -18,26 +21,22 @@ class Oystercard
     @balance += value
   end
 
-  def touch_in(station)
+  def touch_in(station, journey_class = Journey)
     error_message = "Error: Unsufficient funds available. Minimum £#{MINIMUM_FARE} needed..."
 
     fail error_message if @balance < MINIMUM_FARE
 
-    @entry_station = station
+    @journey.start(station)
   end
 
   def touch_out(station)
     deduct(MINIMUM_FARE)
-    @trip = { "entry_station" => entry_station, "exit_station" => station }
     @journey_history << @trip
-    @entry_station = nil
+    @journey.end(station)
   end
 
   def in_journey?
-    # It returns true if the
-    # object on the right is not nil and not false,
-    # false if it is nil or false
-    !!entry_station
+    @journey.in_progress?
   end
 
   private

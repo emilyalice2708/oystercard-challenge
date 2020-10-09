@@ -51,7 +51,6 @@ describe Oystercard do
     end
   end
 
-
   describe "#touch_out" do
     let(:station) { double :station }
     let(:station2) { double :station }
@@ -70,7 +69,7 @@ describe Oystercard do
       subject.top_up(10)
       subject.touch_in(:station)
       subject.touch_out(:station)
-      expect(subject.entry_station).to eq(nil)
+      expect(subject.journey.entry_station).to eq(nil)
     end
 
     it "create a trip hash" do

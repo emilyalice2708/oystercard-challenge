@@ -12,4 +12,8 @@ class Journey
   def fare
     1
   end
+
+  def in_progress?
+    !@entry_station.nil? and @exit_station.nil?
+  end
 end
