@@ -1,8 +1,9 @@
 require "oystercard"
 
 describe Oystercard do
-  let(:journey) { double :journey, start: true, end: true}
-  let(:card) {Oystercard.new(Oystercard::INITIAL_BALANCE, Oystercard::BALANCE_LIMIT, journey)}
+  let(:journey) { double :journey, start: true, end: true }
+  let(:journey_class) { double :journey_class, new: journey }
+  let(:card) { Oystercard.new(Oystercard::INITIAL_BALANCE, Oystercard::BALANCE_LIMIT, journey_class) }
 
   it "should have a balance of zero" do
     expect(subject.balance).to eq 0
@@ -34,13 +35,12 @@ describe Oystercard do
     it "deducts a fare from a balance" do
       subject.top_up(10)
       subject.touch_in(station)
-      expect { subject.touch_out(station) }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
+      expect { subject.touch_out(station) }.to change { subject.balance }.by(-Journey::MINIMUM_FARE)
     end
   end
 
   describe "#touch_in" do
     let(:station) { double :entry_station }
-    
 
     it { is_expected.to respond_to(:touch_in).with(1).argument }
 
@@ -51,11 +51,11 @@ describe Oystercard do
     end
 
     it "raises error if insufficient funds on the card" do
-      error_message = "Error: Unsufficient funds available. Minimum £#{Oystercard::MINIMUM_FARE} needed..."
+      error_message = "Error: Unsufficient funds available. Minimum £#{Journey::MINIMUM_FARE} needed..."
       expect { subject.touch_in(station) }.to raise_error(error_message)
-    end 
+    end
 
-    it 'starts a journey' do
+    it "starts a journey" do
       card.top_up(10)
       expect(journey).to receive(:start)
       card.touch_in(station)

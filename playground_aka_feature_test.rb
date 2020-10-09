@@ -7,20 +7,20 @@ p "this is balance"
 p my_oyster_card.balance
 p my_oyster_card.top_up(20)
 
-# Trip 1
+p "Trip 1"
 p my_oyster_card.touch_in("victoria station")
 p my_oyster_card.touch_out("leicester square")
 p my_oyster_card.balance
 p 19
 
-# Trip 2
+p "Trip 2"
 p my_oyster_card.touch_in("tulse hill")
 p my_oyster_card.balance
 p 19
 p my_oyster_card.in_journey?
 p true
 
-# Trip 3
+p "Trip 3"
 p my_oyster_card.touch_in("victoria station")
 p my_oyster_card.balance
 p 13
@@ -28,7 +28,7 @@ p my_oyster_card.touch_out("leicester square")
 p my_oyster_card.balance
 p 12
 
-# Trip 4
+p "Trip 4"
 p my_oyster_card.touch_out("liverpool street")
 p my_oyster_card.balance
 p 6
