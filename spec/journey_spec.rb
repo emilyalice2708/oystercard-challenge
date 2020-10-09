@@ -16,7 +16,20 @@ describe Journey do
     expect(journey.exit_station).to eq exit_station
   end
 
-  it "returns a far of 1" do
-    expect(journey.fare).to eq 1
+  describe '#fare' do
+    it "returns a fare of 1" do
+      expect(journey.fare).to eq 1
+    end
+    
+  end
+
+  describe '#complete' do
+    journey.start(entry_station)
+    context 'given an entry station' do
+      
+      it 'returns false when missing exit station' do
+        expect(journey).not_to be_complete
+      end
+    end
   end
 end
