@@ -1,18 +1,16 @@
-require_relative "./journey.rb"
+require_relative "journey.rb"
 require_relative "journey_log"
 
 class Oystercard
-  attr_reader :balance, :maximum_limit, :trip, :journey_history, :journey
+  attr_reader :balance, :maximum_limit, :journey_log
 
   INITIAL_BALANCE = 0
   BALANCE_LIMIT = 90
 
-  def initialize(balance = INITIAL_BALANCE, maximum_limit = BALANCE_LIMIT, journey_class = Journey)
+  def initialize(balance = INITIAL_BALANCE, maximum_limit = BALANCE_LIMIT, journey_log = JourneyLog)
     @balance = balance
     @maximum_limit = maximum_limit
-    @journey_history = []
-    @journey_class = journey_class
-    @journey = journey_class.new
+    @journey_log = journey_log.new
   end
 
   def top_up(value)
@@ -27,23 +25,25 @@ class Oystercard
 
     fail error_message if @balance < journey_class::MINIMUM_FARE
 
-    @journey = @journey_class.new(station)
+    @journey_log.start(station)
+
+    deduct if @journey_log.last_journey && @journey_log.last_journey.exit_station.nil?
+    
   end
 
   def touch_out(station)
-    @journey.end(station)
-    deduct(@journey.fare)
-    @journey_history << @journey
-    @journey = @journey_class.new
+    @journey_log.end(station)
+    deduct
   end
 
-  def in_journey?
-    @journey.in_progress?
+  def view_journey
+    @journey_log.journeys
   end
-
+  
   private
 
   def deduct(amount = 0)
-    @balance -= amount
+    @balance -= @journey_log.last_journey.fare
   end
+
 end
