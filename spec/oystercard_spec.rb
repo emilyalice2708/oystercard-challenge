@@ -86,6 +86,7 @@ describe Oystercard do
 
     it "ends a journey" do
       card.top_up(10)
+      allow(journey).to receive(:fare).and_return(10)
       expect(journey).to receive(:end).with(station2)
       card.touch_out(station2)
     end
@@ -93,6 +94,7 @@ describe Oystercard do
     it "stores the journey in the journey history" do
       card.top_up(10)
       card.touch_in(station)
+      allow(journey).to receive(:fare).and_return(10)
       card.touch_out(station2)
       expect(card.journey_history).to include(journey)
     end
