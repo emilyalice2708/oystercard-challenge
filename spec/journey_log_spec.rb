@@ -17,8 +17,21 @@ describe JourneyLog do
             subject.start(station)
         end
 
-        it 'records a journey' do
+        it 'records finished, but incomplete journeys' do
             subject.start(station)
+            subject.start(station)
+            expect(subject.journey_log).to eq([journey])
+        end
+    end
+
+    describe '#finish' do
+        it 'ends a journey' do
+            expect(journey).to receive(:end).with(station)
+            subject.finish(station)
+        end
+        it 'records a journey' do
+            allow(journey).to receive(:end).and_return(journey)
+            subject.finish(station)
             expect(subject.journey_log).to include(journey)
         end
     end
