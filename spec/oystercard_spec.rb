@@ -57,7 +57,7 @@ describe Oystercard do
 
     it "starts a journey" do
       card.top_up(10)
-      expect(journey).to receive(:start)
+      expect(journey_class).to receive(:new)
       card.touch_in(station)
     end
   end

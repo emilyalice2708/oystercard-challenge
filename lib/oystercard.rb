@@ -1,4 +1,5 @@
 require_relative "./journey.rb"
+require_relative "journey_log"
 
 class Oystercard
   attr_reader :balance, :maximum_limit, :trip, :journey_history, :journey
@@ -26,7 +27,7 @@ class Oystercard
 
     fail error_message if @balance < journey_class::MINIMUM_FARE
 
-    @journey.start(station)
+    @journey = @journey_class.new(station)
   end
 
   def touch_out(station)

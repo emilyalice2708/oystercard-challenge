@@ -4,10 +4,10 @@ describe Journey do
   let(:entry_station) { double(:station) }
   let(:exit_station) { double(:station) }
   let(:oystercard) { double :oystercard }
-  let(:journey) { Journey.new }
+  let(:no_entry_journey) { described_class.new }
+  let(:journey) { Journey.new(entry_station) }
 
   it "store the entry station" do
-    journey.start(entry_station)
     expect(journey.entry_station).to eq entry_station
   end
 
@@ -37,7 +37,6 @@ describe Journey do
 
   describe "#complete" do
     context "given an entry station" do
-      before { journey.start(entry_station) }
       it "returns false when missing exit station" do
         expect(journey).not_to be_complete
       end
@@ -49,15 +48,14 @@ describe Journey do
       end
     end
     context "not given an entry station" do
-      before { journey.start }
       context "and ended without an exit station" do
-        before { journey.end }
+        before { no_entry_journey.end }
         it "returns false when not given an exit station" do
-          expect(journey).not_to be_complete
+          expect(no_entry_journey).not_to be_complete
         end
       end
       context "but given an exit station" do
-        before { journey.end(exit_station) }
+        before { no_entry_journey.end(exit_station) }
         it "returns false" do
           expect(journey).not_to be_complete
         end
