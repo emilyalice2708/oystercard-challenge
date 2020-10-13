@@ -9,7 +9,7 @@ Week 2 pair programming challenge.
 
 ## How to run
 
-Via the irb:
+Using irb:
 ```
 irb
 require './lib/oystercard.rb'
